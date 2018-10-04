@@ -27,6 +27,7 @@
 
         this.iniciar()
         this.generarSecuencia()
+        this.siguienteNivel()
 
       }
 
@@ -46,14 +47,64 @@
 
       }
 
-      generarSecuencia(){
+        siguienteNivel(){
+
+          this.iluminarSecuencia()
+
+        }
+
+        numToColor(num){
+
+          switch(num){
+
+            case 0:
+              return 'celeste'
+            case 1:
+              return 'violeta'
+            case 2:
+              return 'naranja'
+            case 3:
+              return 'verde'
+
+          }
+
+        }
+
+        iluminarSecuencia(){
+
+          for (let i = 0; i < this.nivel; i++) {
+
+          
+            let color = this.numToColor(this.secuencia[i])
+            setTimeout( () => this.iluminarColor(color), 1000 * i)
+
+          };
+
+        }
+
+        iluminarColor(color){
+
+          //Iluminamos los colores usando los valores que contienen el llamado a los div de los colores
+          this.colores[color].classList.add('light')
+          //Apagar la ilumincion (el light) cierta cantidad de tiempo
+          setTimeout( () => this.apagarColor(color),350 )
+
+        }
+
+        apagarColor(color){
+
+          this.colores[color].classList.remove('light')
+
+        }
+
+        generarSecuencia(){
 
         //llamar a la funcion fill xq luego queremos llamar a la funcion map y el map no va a funcionnar cuando tengamos elementos q no estan definidos
         // dentro de un array, al menos debe tener el valor 0. n es 0. math.random retorna un valor entre 0 y 1 y al multiplicarlo * 4 obtendremos un valor entre
         // 0 y 4 pero nunca llegara a ser 4. Math.floor redondeo el numero hacia abajo
-        this.secuenta = new Array(10).fill(0).map(n => Math.floor( (Math.random() * 4 ) ) )
+        this.secuencia = new Array(10).fill(0).map(n => Math.floor( (Math.random() * 4 ) ) )
 
-      }
+        }
 
 
     }
