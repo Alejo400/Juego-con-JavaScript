@@ -3,7 +3,7 @@ const celeste = document.getElementById('celeste')
     const naranja = document.getElementById('naranja')
     const verde = document.getElementById('verde')
     const btnEmpezar = document.getElementById('btnEmpezar')
-    const ULTIMO_NIVEL = 10
+    const ULTIMO_NIVEL = 8
 
     class Juego{
 
@@ -13,7 +13,7 @@ const celeste = document.getElementById('celeste')
 
           this.iniciar()
           this.generarSecuencia()
-                  setTimeout(this.siguienteNivel, 500)
+          setTimeout(this.siguienteNivel, 500)
 
 
 
@@ -24,8 +24,9 @@ const celeste = document.getElementById('celeste')
         var self = this
         this.elegirColor = this.elegirColor.bind(self) //esto ata al juego el this, para que this sea el juego y no cada un ode los botones
         this.siguienteNivel = this.siguienteNivel.bind(self) 
+        this.iniciar = this.iniciar.bind(self)
+        this.toggleBtnEmpezar() //Funcion para agregar o remover el boton de empezar juego
 
-        btnEmpezar.classList.add('hide') //Ocultamos el boton de empezar una vez hemos iniciado
         this.nivel = 1
         this.colores = {
 
@@ -34,6 +35,20 @@ const celeste = document.getElementById('celeste')
           violeta,
           naranja,
           verde
+
+        }
+
+      }
+
+      toggleBtnEmpezar(){
+
+        if(btnEmpezar.classList.contains('hide')){
+
+                  btnEmpezar.classList.remove('hide') //removemos el boton de empezar una vez hemos iniciado nuevamente el juego
+
+        }else{
+
+                  btnEmpezar.classList.add('hide') //Ocultamos el boton de empezar una vez hemos iniciado
 
         }
 
@@ -145,12 +160,37 @@ const celeste = document.getElementById('celeste')
 
         }
 
+        //Funcion si gano el juego
+
+        win(){
+
+          swal('Alejo','Felicitaciones, ganaste el juego!','success')
+          .then(this.iniciar)
+
+        }
+
+        lose(){
+
+          swal('Alejo','Has perdido!','error')
+          .then( () => {
+
+            this.eliminarEventosClick()
+            this.iniciar()
+
+          })
+
+        }
+
+        //Funcion si perdio el juego
+
         elegirColor(ev){
 
                           //  Parametro del eventListener.objetivo.dataset.elcolor al cual se le ha hecho click
           const nombreColor = ev.target.dataset.color
           const numeroColor = this.ColorToNum(nombreColor)
           this.iluminarColor(nombreColor)
+
+          console.log(numeroColor)
 
           //si el numero de color es igual al numero contenido en nuestro array que contiene la respuesta el cual lo podemos deducir a partir
           // del subNivel en el cual se encuentra nuestro usuario, entonces aumentamos el nivel en el q este se encuentra
@@ -166,7 +206,8 @@ const celeste = document.getElementById('celeste')
 
             if(this.nivel === (ULTIMO_NIVEL + 1)){
 
-              //Gano
+              //Si gano el juego
+              this.win()
 
             }else{
 
@@ -178,7 +219,8 @@ const celeste = document.getElementById('celeste')
 
           }else {
 
-            //perdio
+            //Si perdio el juego
+            this.lose()
 
           }
 
@@ -189,6 +231,6 @@ const celeste = document.getElementById('celeste')
 
     function empezarJuego(){
 
-      var juego = new Juego()
+      window.juego = new Juego()
 
     }
